@@ -1,0 +1,11 @@
+version: "3"
+services:
+
+  slack-tracker:
+    image: morehumansoftware/slacktracker:tagname
+    ports:
+      - "8080:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure

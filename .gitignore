@@ -1,0 +1,5 @@
+connection-string.txt
+bin/
+obj/
+.idea/
+.env
