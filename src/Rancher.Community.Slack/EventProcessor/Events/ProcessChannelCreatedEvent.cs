@@ -8,7 +8,7 @@ using Rancher.Community.Slack.Data.Models;
 using Rancher.Community.Slack.Models;
 using Rancher.Community.Slack.Utilities;
 
-namespace Rancher.Community.Slack
+namespace Rancher.Community.Slack.EventProcessor
 {
         public static partial class Events
         {

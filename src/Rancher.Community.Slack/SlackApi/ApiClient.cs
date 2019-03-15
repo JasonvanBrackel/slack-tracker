@@ -10,25 +10,26 @@ namespace Rancher.Community.Slack.SlackApi
 {
     public class ApiClient
     {
+        private readonly string _url;
         private readonly string _authorizationToken;
         private HttpClient _client;
         private UriBuilder _uriBuilder;
 
         public ApiClient(string url, string authorizationToken)
         {
+            _url = url;
             _authorizationToken = authorizationToken;
-            _uriBuilder = new UriBuilder
-            {
-                Scheme = "https",
-                Host = url
-            };
-
             ResetQueryParameters();
             _client = new HttpClient();
         }
 
         private void ResetQueryParameters()
         {
+            _uriBuilder = new UriBuilder
+            {
+                Scheme = "https",
+                Host = _url
+            };
             var query = HttpUtility.ParseQueryString(_uriBuilder.Query);
             query["token"] = _authorizationToken;
             _uriBuilder.Query = query.ToString();
@@ -92,6 +93,7 @@ namespace Rancher.Community.Slack.SlackApi
             const string path = "api/conversations.history";
             _uriBuilder.Path = path;
             var response = _client.GetAsync(_uriBuilder.Uri).Result;
+            Console.WriteLine($"Debug: { response.ReadAsString() }");
             return response.ReadFromJson<ConversationHistoryResponse>();
         }
 

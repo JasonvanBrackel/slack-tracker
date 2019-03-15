@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <RootNamespace>Rancher.Community.Slack.Welcomer</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="NLog">
+        <Version>4.5.11</Version>
+      </PackageReference>
+      <PackageReference Include="prometheus-net">
+        <Version>3.0.3</Version>
+      </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SlackApi\SlackApi.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -13,10 +13,13 @@
     <ItemGroup>
       <ProjectReference Include="..\BufferingMiddleware\BufferingMiddleware.csproj" />
       <ProjectReference Include="..\Data\Data.csproj" />
-      <ProjectReference Include="..\Events\Events.csproj" />
       <ProjectReference Include="..\Models\Models.csproj" />
       <ProjectReference Include="..\SlackApi\SlackApi.csproj" />
       <ProjectReference Include="..\SlackEventVerificationMiddleware\SlackEventVerificationMiddleware.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Events" />
     </ItemGroup>
 
 </Project>

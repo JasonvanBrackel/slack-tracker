@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Rancher.Community.Slack.Data;
 using Rancher.Community.Slack.SlackApi;
 
-namespace Rancher.Community.Slack
+namespace Rancher.Community.Slack.EventProcessor
 {
     public static class SlackEventRouter
     {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +9,7 @@ using Rancher.Community.Slack.Models;
 using Rancher.Community.Slack.SlackApi;
 using Rancher.Community.Slack.Utilities;
 
-namespace Rancher.Community.Slack
+namespace Rancher.Community.Slack.EventProcessor
 {
     public static partial class Events
     {
