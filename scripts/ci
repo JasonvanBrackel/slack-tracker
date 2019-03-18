@@ -3,9 +3,9 @@
 docker build -t morehumansoftware/slack-user-scraper:latest -f ./scripts/UserScraper.Dockerfile ./src/Rancher.Community.Slack
 docker build -t morehumansoftware/slack-channel-scraper:latest -f ./scripts/ChannelScraper.Dockerfile ./src/Rancher.Community.Slack
 docker build -t morehumansoftware/slack-event-processor:latest -f ./scripts/EventProcessor.Dockerfile ./src/Rancher.Community.Slack
-docker build -t morehumansoftware/slack-welcomer:latest Welcomer.Dockerfile ./scripts/Welcomer.Dockerfile ./src/Rancher.Community.Slack
+docker build -t morehumansoftware/slack-welcomer:latest -f ./scripts/Welcomer.Dockerfile ./src/Rancher.Community.Slack
 
 docker push morehumansoftware/slack-user-scraper:latest
 docker push morehumansoftware/slack-channel-scraper:latest
-docker push morehumansoftware/slack-event-processorr:latest
+docker push morehumansoftware/slack-event-processor:latest
 docker push morehumansoftware/slack-welcomer:latest
