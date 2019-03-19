@@ -7,6 +7,7 @@ using NLog;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
+using Prometheus;
 using Rancher.Community.Slack.Data;
 using Rancher.Community.Slack.SlackApi;
 
@@ -23,76 +24,115 @@ namespace Rancher.Community.Slack.Welcomer
         
         static void Main(string[] args)
         {
+            ConfigureStructuredLogging();
+            _logger = LogManager.GetCurrentClassLogger();
+            _logger.Info("Starting Slack Welcomer.");
+
             StartMetricsEndpoint();
             
             GatherEnvironmentVariables();
             
-            ConfigureLogging();
-            _logger = LogManager.GetCurrentClassLogger();
-            _logger.Info("Starting Slack Welcomer.");
-
-            ConfigureClient();
+            ConfigureSlackApiClient();
             
-            // Start Scraper Loop
-            Task.Factory.StartNew(() =>
+            _logger.Info("Starting welcome users loop.");
+            while (true)
             {
-                while (true)
-                {
-                    WelcomeNewUsers(_welcome_message);
-                    _logger.Log(LogLevel.Info, "Done welcoming new users.  Sleeping for 5 minutes");
-                    Thread.Sleep(new TimeSpan(0, 5, 0));
-                }
-            }, TaskCreationOptions.LongRunning);
-        }
-
-        private static void ConfigureClient()
-        {
-            _client = new ApiClient(_slackUrl, _authToken);
-        }
-
-        private static void WelcomeNewUsers(string welcomeMessage)
-        {
-            var now = DateTime.UtcNow;
-            if (DateTime.Now.IsDaylightSavingTime())
-            {
-                now = now.AddHours(-4);
-            }
-            else
-            {
-                now = now.AddHours(-5);
-            }
-
-            if (now.Hour >= 9 &&
-                now.Hour < 17 &&
-                now.DayOfWeek >= DayOfWeek.Monday &&
-                now.DayOfWeek <= DayOfWeek.Friday)
-            {
-                _logger.Log(LogLevel.Info, "Welcoming new users.");
-                using (var context = new SlackTrackerContext())
-                {
-                    var usersToWelcome =
-                        context.UserJoinedGeneralEvents.Where(joins => joins.HasBeenWelcomed.Equals(false));
-
-                    foreach (var user in usersToWelcome)
-                    {
-                        _logger.Log(LogLevel.Info, $"Welcoming {user.User}.");
-                        _client.PostMessage(user.User, welcomeMessage);
-                    }
-
-                    context.Database.ExecuteSqlCommand(
-                        "UPDATE dbo.UserJoinedGeneralEvents SET HasBeenWelcomed = 1 FROM dbo.UserJoinedGeneralEvents");
-                }
-            }
-            else
-            {
-                _logger.Log(LogLevel.Info, "Waiting until 9am ET to welcome users.");
+                _logger.Info("Waking up, preparing to welcome new users.");
+                WelcomeNewUsers(_welcome_message);
+                _logger.Info("Done welcoming new users.  Sleeping for 15 minutes");
+                Thread.Sleep(new TimeSpan(0, 15, 0));
             }
         }
         
+        private static void WelcomeNewUsers(string welcomeMessage)
+        {
+            try
+            {
+                var now = DateTime.UtcNow;
+                if (DateTime.Now.IsDaylightSavingTime())
+                {
+                    now = now.AddHours(-4);
+                }
+                else
+                {
+                    now = now.AddHours(-5);
+                }
+
+                if (now.Hour >= 9 &&
+                    now.Hour < 17 &&
+                    now.DayOfWeek >= DayOfWeek.Monday &&
+                    now.DayOfWeek <= DayOfWeek.Friday)
+                {
+                    _logger.Log(LogLevel.Info, "Welcoming new users.");
+                    using (var context = new SlackTrackerContext())
+                    {
+                        var usersToWelcome =
+                            context.UserJoinedGeneralEvents.Where(joins => joins.HasBeenWelcomed.Equals(false));
+
+                        foreach (var user in usersToWelcome)
+                        {
+                            _logger.Log(LogLevel.Info, $"Welcoming {user.User}.");
+                            _client.PostMessage(user.User, welcomeMessage);
+                        }
+
+                        context.Database.ExecuteSqlCommand(
+                            "UPDATE dbo.UserJoinedGeneralEvents SET HasBeenWelcomed = 1 FROM dbo.UserJoinedGeneralEvents");
+                    }
+                }
+                else
+                {
+                    _logger.Log(LogLevel.Info, "Waiting until 9am ET to welcome users.");
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "An error occurred while welcoming new users.  Continuing execution.");
+            }
+        }
+        
+        private static void ConfigureStructuredLogging()
+        {
+            try
+            {
+                var config = new LoggingConfiguration();
+                var consoleTarget = new ConsoleTarget
+                {
+                    Layout = new JsonLayout
+                    {
+                        IncludeAllProperties = true,
+                        Attributes =
+                        {
+                            new JsonAttribute("time", new SimpleLayout("${longdate}")),
+                            new JsonAttribute("level", new SimpleLayout("${level}")),
+                            new JsonAttribute("message", new SimpleLayout("${message}")),
+                        }
+                    }
+                };
+                config.AddRuleForAllLevels(consoleTarget, "*");
+                LogManager.Configuration = config;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred while attempting to configure the logger.  Exiting.");
+                Console.WriteLine(e.StackTrace);
+                throw;
+            }
+        }
+
+        
         private static void StartMetricsEndpoint()
         {
-            var metricServer = new Prometheus.MetricServer(3001);
-            metricServer.Start();
+            try
+            {
+                _logger.Info("Starting metrics enpoint.");
+                var metricServer = new MetricServer(3001);
+                metricServer.Start();
+            }
+            catch (Exception e)
+            {
+                _logger.Fatal(e, "An error occurred while attempting to start the metrics endpoint.");
+                throw;
+            }
         }
 
         private static void GatherEnvironmentVariables()
@@ -112,29 +152,24 @@ namespace Rancher.Community.Slack.Welcomer
             catch (Exception e)
             {
                 _logger.Error(e,
-                    "There was a problem grabbing environment variables.  The variables required are 'api_username', 'api_key', and 'discourse_server'");
+                    "There was a problem grabbing environment variables.  The variables required are 'slack_url', 'authorization_token', 'db_connection', 'welcome_message'");
                 throw;
             }
         }
-
-        private static void ConfigureLogging()
+        
+        private static void ConfigureSlackApiClient()
         {
-            var config = new LoggingConfiguration();
-            var consoleTarget = new ConsoleTarget
+            _logger.Info("Configuring Slack API client");
+
+            try
             {
-                Layout = new JsonLayout
-                {
-                    IncludeAllProperties = true,
-                    Attributes =
-                    {
-                        new JsonAttribute("time", new SimpleLayout("${longdate}")),
-                        new JsonAttribute("level", new SimpleLayout("${level}")),
-                        new JsonAttribute("message", new SimpleLayout("${message}")),
-                    }
-                }
-            };
-            config.AddRuleForAllLevels(consoleTarget, "*");
-            LogManager.Configuration = config;
+                _client = new ApiClient(_slackUrl, _authToken);
+            }
+            catch (Exception e)
+            {
+                _logger.Fatal(e, "An error occurred configuring the Slack API client.");
+                throw;
+            }
         }
     }
 }

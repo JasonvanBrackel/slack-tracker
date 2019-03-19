@@ -7,6 +7,7 @@ using NLog;
 using NLog.Config;
 using NLog.Layouts;
 using NLog.Targets;
+using Prometheus;
 using Rancher.Community.Slack.Data;
 using Rancher.Community.Slack.Data.Models;
 using Rancher.Community.Slack.Models;
@@ -24,31 +25,24 @@ namespace Rancher.Community.Slack.ChannelScraper
 
         static void Main(string[] args)
         {
+            ConfigureStructuredLogging();
+            _logger = LogManager.GetCurrentClassLogger();
+            _logger.Info("Starting Slack Channel Scraper.");
+
             StartMetricsEndpoint();
             
             GatherEnvironmentVariables();
             
-            ConfigureLogging();
-            _logger = LogManager.GetCurrentClassLogger();
-            _logger.Info("Starting Slack Channel Scrapper.");
-
-            ConfigureClient();
+            ConfigureSlackApiClient();
             
-            // Start Scraper Loop
-            Task.Factory.StartNew(() =>
+            while (true)
             {
-                while (true)
-                {
-                    ScrapeChannelData(_slackUrl, _authToken);
-                    _logger.Log(LogLevel.Info, "Done scrapping channel data.  Sleeping for an hour");
-                    Thread.Sleep(new TimeSpan(1, 0, 0));
-                }
-            }, TaskCreationOptions.LongRunning);
-        }
-
-        private static void ConfigureClient()
-        {
-            _client = new ApiClient(_slackUrl, _authToken);
+                _logger.Info("Waking up.  Preparing to scrape channel data.");
+                ScrapeChannelData(_slackUrl, _authToken);
+                _logger.Info("Done scrapping channel data.  Sleeping for an hour");
+                Thread.Sleep(new TimeSpan(1, 0, 0));
+            }
+  
         }
 
         private static void ScrapeChannelData(string slackServer, string authoriztionToken)
@@ -129,10 +123,49 @@ namespace Rancher.Community.Slack.ChannelScraper
             }
         }
         
+        private static void ConfigureStructuredLogging()
+        {
+            try
+            {
+                var config = new LoggingConfiguration();
+                var consoleTarget = new ConsoleTarget
+                {
+                    Layout = new JsonLayout
+                    {
+                        IncludeAllProperties = true,
+                        Attributes =
+                        {
+                            new JsonAttribute("time", new SimpleLayout("${longdate}")),
+                            new JsonAttribute("level", new SimpleLayout("${level}")),
+                            new JsonAttribute("message", new SimpleLayout("${message}")),
+                        }
+                    }
+                };
+                config.AddRuleForAllLevels(consoleTarget, "*");
+                LogManager.Configuration = config;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("An error occurred while attempting to configure the logger.  Exiting.");
+                Console.WriteLine(e.StackTrace);
+                throw;
+            }
+        }
+
+        
         private static void StartMetricsEndpoint()
         {
-            var metricServer = new Prometheus.MetricServer(3001);
-            metricServer.Start();
+            try
+            {
+                _logger.Info("Starting metrics enpoint.");
+                var metricServer = new MetricServer(3001);
+                metricServer.Start();
+            }
+            catch (Exception e)
+            {
+                _logger.Fatal(e, "An error occurred while attempting to start the metrics endpoint.");
+                throw;
+            }
         }
 
         private static void GatherEnvironmentVariables()
@@ -150,29 +183,24 @@ namespace Rancher.Community.Slack.ChannelScraper
             catch (Exception e)
             {
                 _logger.Error(e,
-                    "There was a problem grabbing environment variables.  The variables required are 'slack_url', 'authorization_token', and 'db_connection'");
+                    "There was a problem grabbing environment variables.  The variables required are 'slack_url', 'authorization_token', 'db_connection'");
                 throw;
             }
         }
-
-        private static void ConfigureLogging()
+        
+        private static void ConfigureSlackApiClient()
         {
-            var config = new LoggingConfiguration();
-            var consoleTarget = new ConsoleTarget
+            _logger.Info("Configuring Slack API client");
+
+            try
             {
-                Layout = new JsonLayout
-                {
-                    IncludeAllProperties = true,
-                    Attributes =
-                    {
-                        new JsonAttribute("time", new SimpleLayout("${longdate}")),
-                        new JsonAttribute("level", new SimpleLayout("${level}")),
-                        new JsonAttribute("message", new SimpleLayout("${message}")),
-                    }
-                }
-            };
-            config.AddRuleForAllLevels(consoleTarget, "*");
-            LogManager.Configuration = config;
+                _client = new ApiClient(_slackUrl, _authToken);
+            }
+            catch (Exception e)
+            {
+                _logger.Fatal(e, "An error occurred configuring the Slack API client.");
+                throw;
+            }
         }
     }
 }
