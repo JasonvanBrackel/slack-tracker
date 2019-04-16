@@ -117,6 +117,14 @@ namespace Rancher.Community.Slack.Data
                 entity.Property(e => e.Name).HasMaxLength(255);
 
                 entity.Property(e => e.Username).HasMaxLength(255);
+
+                entity.Property(e => e.EmailAddress).HasMaxLength(1000);
+
+                entity.Property(e => e.Timezone).HasMaxLength(255);
+
+                entity.Property(e => e.TimezoneLabel).HasMaxLength(255);
+
+                entity.Property(e => e.ImagePath).HasMaxLength(2083);
             });
         }
     }

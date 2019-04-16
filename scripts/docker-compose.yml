@@ -1,0 +1,32 @@
+version: "3"
+services:
+  welcomer:
+    image: morehumansoftware/slack-welcomer:latest
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "3001"
+  channel-scraper:
+    image: morehumansoftware/slack-channel-scraper:latest
+    deploy:
+      replicas: 1
+      restart_policy: on-failure
+    ports:
+      - "3001"
+  user-scraper:
+    image: morehumansoftware/slack-user-scraper:latest
+    deploy:
+      replicas: 1
+      restart_policy: on-failure
+    ports:
+      - "3001"
+  event-processor:
+    image: morehumansoftware/slack-event-processor:latest
+    deploy:
+      replicas: 1
+      restart_policy: on-failure
+    ports:
+      - "3001"
+      - "8080"

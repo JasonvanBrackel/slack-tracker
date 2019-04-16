@@ -60,14 +60,38 @@ namespace Rancher.Community.Slack.UserScraper
                     if (memberResponses != null)
                         foreach (var member in memberResponses)
                         {
-                            _logger.Log(LogLevel.Info, $"Looking for Member {member.real_name}.");
-                            if (dbContext.Users.Count(c => c.Id.Equals(member.id)).Equals(0))
+                            _logger.Info($"Looking for Member {member.real_name}.");
+                            if (dbContext.Users.Count(c => c.Id.Equals(member.id) && c.EmailAddress == null) != 0)
+                            {
+                                _logger.Info($"Member { member.real_name}, found missing e-mail address.  Updating");
+                                var user = dbContext.Users.Single(c => c.Id.Equals(member.id));
+                                user.EmailAddress = member.profile.email;
+                                user.Timezone = member.tz;
+                                user.TimezoneLabel = member.tz_label;
+                                user.ImagePath = member.profile.image_original;
+                                dbContext.Update(user);
+                                dbContext.SaveChanges();
+
+                            } else if (dbContext.Users.Count(c => c.Id.Equals(member.id)).Equals(0))
                             {
                                 _logger.Log(LogLevel.Info, $"Adding User {member.name}, {member.real_name}.");
                                 dbContext.Users.Add(new Users()
-                                    {Id = member.id, Username = member.name, Name = member.real_name});
+                                {
+                                    Id = member.id, 
+                                    Username = member.name, 
+                                    Name = member.real_name,
+                                    EmailAddress = member.profile.email,
+                                    Timezone = member.tz,
+                                    TimezoneLabel = member.tz_label,
+                                    ImagePath = member.profile.image_original
+                                });
                                 dbContext.SaveChanges();
                             }
+                            else
+                            {
+                                _logger.Log(LogLevel.Info, $"User {member.name}, {member.real_name} found. No updates required");
+                            }
+                            
                         }
 
                     if (memberResponse.response_metadata != null &&
