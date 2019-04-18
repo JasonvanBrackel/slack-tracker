@@ -1,0 +1,1280 @@
+{
+    "__inputs": [
+      {
+        "name": "DS_MICROSOFT_SQL SERVER",
+        "label": "Microsoft SQL Server",
+        "description": "",
+        "type": "datasource",
+        "pluginId": "mssql",
+        "pluginName": "Microsoft SQL Server"
+      }
+    ],
+    "__requires": [
+      {
+        "type": "grafana",
+        "id": "grafana",
+        "name": "Grafana",
+        "version": "5.2.4"
+      },
+      {
+        "type": "panel",
+        "id": "graph",
+        "name": "Graph",
+        "version": "5.0.0"
+      },
+      {
+        "type": "datasource",
+        "id": "mssql",
+        "name": "Microsoft SQL Server",
+        "version": "1.0.0"
+      },
+      {
+        "type": "panel",
+        "id": "singlestat",
+        "name": "Singlestat",
+        "version": "5.0.0"
+      },
+      {
+        "type": "panel",
+        "id": "table",
+        "name": "Table",
+        "version": "5.0.0"
+      },
+      {
+        "type": "panel",
+        "id": "text",
+        "name": "Text",
+        "version": "5.0.0"
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "id": null,
+    "links": [],
+    "panels": [
+      {
+        "content": "<ul>\n<li><b>New Users:</b> 1866</li>\n<li><b>Avg/Day:</b> 20.5</li>\n</ul>",
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 0,
+          "y": 0
+        },
+        "id": 16,
+        "links": [],
+        "mode": "html",
+        "title": "Q2 Targets",
+        "type": "text"
+      },
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": false,
+        "colors": [
+          "#299c46",
+          "rgba(237, 129, 40, 0.89)",
+          "#d44a3a"
+        ],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "format": "none",
+        "gauge": {
+          "maxValue": 100,
+          "minValue": 0,
+          "show": false,
+          "thresholdLabels": false,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 3,
+          "y": 0
+        },
+        "id": 14,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": false
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "SELECT COUNT([User]) FROM dbo.UserJoinedGeneralEvents WHERE DATEPART(QUARTER, Timestamp) = DATEPART(QUARTER, GETDATE()) GROUP BY DATEPART(QUARTER, [Timestamp]) ",
+            "refId": "A",
+            "resultFormat": "table",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "thresholds": "",
+        "title": "New Users This Quarter",
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "N/A",
+            "value": "null"
+          }
+        ],
+        "valueName": "avg"
+      },
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": false,
+        "colors": [
+          "#299c46",
+          "rgba(237, 129, 40, 0.89)",
+          "#d44a3a"
+        ],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "decimals": 3,
+        "format": "none",
+        "gauge": {
+          "maxValue": 100,
+          "minValue": 0,
+          "show": false,
+          "thresholdLabels": false,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 6,
+          "y": 0
+        },
+        "id": 12,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": false
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "SELECT CONVERT(real, COUNT([User])) / (select datediff(day,dateadd(quarter,datediff(quarter,0,GETDATE()),0),GETDATE())) FROM dbo.UserJoinedGeneralEvents WHERE DATEPART(QUARTER, Timestamp) = DATEPART(QUARTER, GETDATE()) GROUP BY DATEPART(QUARTER, [Timestamp]) ",
+            "refId": "A",
+            "resultFormat": "table",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "thresholds": "",
+        "title": "Avg. Users/Day This Quarter",
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "N/A",
+            "value": "null"
+          }
+        ],
+        "valueName": "avg"
+      },
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": false,
+        "colors": [
+          "#299c46",
+          "rgba(237, 129, 40, 0.89)",
+          "#d44a3a"
+        ],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "decimals": 3,
+        "format": "none",
+        "gauge": {
+          "maxValue": 100,
+          "minValue": 0,
+          "show": false,
+          "thresholdLabels": false,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 9,
+          "y": 0
+        },
+        "id": 19,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": false
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "-- This query contains an adjustment for 2019, remove the subracted days in 2020\nSELECT \n    CONVERT(real, COUNT([User])) / (DATEPART(DAYOFYEAR, GETDATE()) - 70)\nFROM \n    dbo.UserJoinedGeneralEvents \nWHERE \n    DATEPART(year, Timestamp) = DATEPART(year, GETDATE()) \nGROUP BY \n    DATEPART(year, [Timestamp]) ",
+            "refId": "A",
+            "resultFormat": "table",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "thresholds": "",
+        "title": "Avg. Users/Day This Year",
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "N/A",
+            "value": "null"
+          }
+        ],
+        "valueName": "avg"
+      },
+      {
+        "cacheTimeout": null,
+        "colorBackground": false,
+        "colorValue": false,
+        "colors": [
+          "#d44a3a",
+          "#e5ac0e",
+          "#299c46"
+        ],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "format": "none",
+        "gauge": {
+          "maxValue": 50,
+          "minValue": 0,
+          "show": true,
+          "thresholdLabels": true,
+          "thresholdMarkers": true
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 12,
+          "y": 0
+        },
+        "id": 18,
+        "interval": null,
+        "links": [],
+        "mappingType": 1,
+        "mappingTypes": [
+          {
+            "name": "value to text",
+            "value": 1
+          },
+          {
+            "name": "range to text",
+            "value": 2
+          }
+        ],
+        "maxDataPoints": 100,
+        "nullPointMode": "connected",
+        "nullText": null,
+        "postfix": "",
+        "postfixFontSize": "50%",
+        "prefix": "",
+        "prefixFontSize": "50%",
+        "rangeMaps": [
+          {
+            "from": "null",
+            "text": "N/A",
+            "to": "null"
+          }
+        ],
+        "sparkline": {
+          "fillColor": "rgba(31, 118, 189, 0.18)",
+          "full": false,
+          "lineColor": "rgb(31, 120, 193)",
+          "show": false
+        },
+        "tableColumn": "",
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "SELECT COUNT(User) FROM dbo.UserJoinedGeneralEvents WHERE DATEPART(DAYOFYEAR, [Timestamp]) = DATEPART(DAYOFYEAR, GETDATE()) ",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "thresholds": "10, 20, 50",
+        "title": "New Users Today",
+        "type": "singlestat",
+        "valueFontSize": "80%",
+        "valueMaps": [
+          {
+            "op": "=",
+            "text": "N/A",
+            "value": "null"
+          }
+        ],
+        "valueName": "avg"
+      },
+      {
+        "columns": [],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "fontSize": "100%",
+        "gridPos": {
+          "h": 9,
+          "w": 3,
+          "x": 0,
+          "y": 5
+        },
+        "id": 23,
+        "links": [],
+        "pageSize": null,
+        "scroll": true,
+        "showHeader": true,
+        "sort": {
+          "col": 1,
+          "desc": true
+        },
+        "styles": [
+          {
+            "alias": "Count",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 0,
+            "pattern": "Count",
+            "type": "number",
+            "unit": "none"
+          },
+          {
+            "alias": "",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "decimals": 2,
+            "pattern": "/.*/",
+            "thresholds": [],
+            "type": "number",
+            "unit": "short"
+          }
+        ],
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "SELECT c.Name, Count(m.Id) as Count\nFROM dbo.MessageHistory m \n    INNER JOIN dbo.Channels c \n    ON c.Id = m.Channel \nWHERE DATEPART(DAYOFYEAR, timestamp) = DATEPART(DAYOFYEAR, GETDATE())\nGROUP BY c.Name \nORDER BY COUNT(m.Id) DESC, c.Name ASC",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Posts Today",
+        "transform": "table",
+        "type": "table"
+      },
+      {
+        "columns": [],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "fontSize": "100%",
+        "gridPos": {
+          "h": 9,
+          "w": 3,
+          "x": 3,
+          "y": 5
+        },
+        "id": 25,
+        "links": [],
+        "pageSize": null,
+        "scroll": true,
+        "showHeader": true,
+        "sort": {
+          "col": 1,
+          "desc": true
+        },
+        "styles": [
+          {
+            "alias": "Count",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 0,
+            "pattern": "Count",
+            "type": "number",
+            "unit": "none"
+          },
+          {
+            "alias": "",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "decimals": 2,
+            "pattern": "/.*/",
+            "thresholds": [],
+            "type": "number",
+            "unit": "short"
+          }
+        ],
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "SELECT c.Name, Count(m.Id) as Count\nFROM dbo.MessageHistory m \n    INNER JOIN dbo.Channels c \n    ON c.Id = m.Channel \nWHERE DATEPART(WEEK, timestamp) = DATEPART(WEEK, GETDATE())\nGROUP BY c.Name \nORDER BY COUNT(m.Id) DESC, c.Name ASC",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Posts this Week",
+        "transform": "table",
+        "type": "table"
+      },
+      {
+        "columns": [],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "fontSize": "100%",
+        "gridPos": {
+          "h": 9,
+          "w": 3,
+          "x": 6,
+          "y": 5
+        },
+        "id": 21,
+        "links": [],
+        "pageSize": null,
+        "scroll": true,
+        "showHeader": true,
+        "sort": {
+          "col": 1,
+          "desc": true
+        },
+        "styles": [
+          {
+            "alias": "Count",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 0,
+            "pattern": "Count",
+            "type": "number",
+            "unit": "none"
+          },
+          {
+            "alias": "",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "decimals": 2,
+            "pattern": "/.*/",
+            "thresholds": [],
+            "type": "number",
+            "unit": "short"
+          }
+        ],
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "SELECT c.Name, Count(m.Id) as Count\nFROM dbo.MessageHistory m \n    INNER JOIN dbo.Channels c \n    ON c.Id = m.Channel \nWHERE DATEPART(month, timestamp) = DATEPART(month, GETDATE())\nGROUP BY c.Name \nORDER BY COUNT(m.Id) DESC, c.Name ASC",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Posts this Month",
+        "transform": "table",
+        "type": "table"
+      },
+      {
+        "columns": [],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "fontSize": "100%",
+        "gridPos": {
+          "h": 9,
+          "w": 3,
+          "x": 9,
+          "y": 5
+        },
+        "id": 27,
+        "links": [],
+        "pageSize": null,
+        "scroll": true,
+        "showHeader": true,
+        "sort": {
+          "col": 1,
+          "desc": true
+        },
+        "styles": [
+          {
+            "alias": "Count",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 0,
+            "pattern": "Count",
+            "type": "number",
+            "unit": "none"
+          },
+          {
+            "alias": "",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "decimals": 2,
+            "pattern": "/.*/",
+            "thresholds": [],
+            "type": "number",
+            "unit": "short"
+          }
+        ],
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "SELECT c.Name, Count(m.Id) as Count\nFROM dbo.MessageHistory m \n    INNER JOIN dbo.Channels c \n    ON c.Id = m.Channel \nWHERE DATEPART(QUARTER, timestamp) = DATEPART(QUARTER, GETDATE())\nGROUP BY c.Name \nORDER BY COUNT(m.Id) DESC, c.Name ASC",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Posts this Quarter",
+        "transform": "table",
+        "type": "table"
+      },
+      {
+        "columns": [],
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "fontSize": "100%",
+        "gridPos": {
+          "h": 9,
+          "w": 4,
+          "x": 12,
+          "y": 5
+        },
+        "id": 29,
+        "links": [],
+        "pageSize": null,
+        "scroll": true,
+        "showHeader": true,
+        "sort": {
+          "col": 1,
+          "desc": true
+        },
+        "styles": [
+          {
+            "alias": "Count",
+            "dateFormat": "YYYY-MM-DD HH:mm:ss",
+            "decimals": 0,
+            "pattern": "Count",
+            "type": "number",
+            "unit": "none"
+          },
+          {
+            "alias": "",
+            "colorMode": null,
+            "colors": [
+              "rgba(245, 54, 54, 0.9)",
+              "rgba(237, 129, 40, 0.89)",
+              "rgba(50, 172, 45, 0.97)"
+            ],
+            "decimals": 2,
+            "pattern": "/.*/",
+            "thresholds": [],
+            "type": "number",
+            "unit": "short"
+          }
+        ],
+        "targets": [
+          {
+            "alias": "",
+            "format": "table",
+            "groupBy": [
+              {
+                "params": [
+                  "$__interval"
+                ],
+                "type": "time"
+              },
+              {
+                "params": [
+                  "null"
+                ],
+                "type": "fill"
+              }
+            ],
+            "orderByTime": "ASC",
+            "policy": "default",
+            "rawSql": "SELECT c.Name, Count(m.Id) as Count\nFROM dbo.MessageHistory m \n    INNER JOIN dbo.Channels c \n    ON c.Id = m.Channel \nWHERE DATEPART(YEAR, timestamp) = DATEPART(YEAR, GETDATE())\nGROUP BY c.Name \nORDER BY COUNT(m.Id) DESC, c.Name ASC",
+            "refId": "A",
+            "resultFormat": "time_series",
+            "select": [
+              [
+                {
+                  "params": [
+                    "value"
+                  ],
+                  "type": "field"
+                },
+                {
+                  "params": [],
+                  "type": "mean"
+                }
+              ]
+            ],
+            "tags": []
+          }
+        ],
+        "title": "Posts this Year",
+        "transform": "table",
+        "type": "table"
+      },
+      {
+        "aliasColors": {},
+        "bars": true,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "decimals": 0,
+        "fill": 1,
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 0,
+          "y": 14
+        },
+        "hideTimeOverride": true,
+        "id": 4,
+        "interval": "",
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "rightSide": false,
+          "show": true,
+          "total": true,
+          "values": true
+        },
+        "lines": false,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "paceLength": 10,
+        "percentage": false,
+        "pointradius": 2,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "alias": "",
+            "format": "time_series",
+            "rawSql": "SELECT \n  COUNT(m.Id) as Posts,\n  c.Name as Channel,\n  CONVERT(date, m.Timestamp) as time       \nFROM\n  dbo.MessageHistory m INNER JOIN Channels c on m.Channel = c.Id\nWHERE\n  $__timeFilter(m.Timestamp)\nGROUP BY c.Name, CONVERT(date, m.Timestamp)\nORDER BY CONVERT(date, m.Timestamp) ASC",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Posts Daily",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": "",
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": true,
+        "cacheTimeout": null,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "decimals": 0,
+        "fill": 2,
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 8,
+          "y": 14
+        },
+        "id": 10,
+        "legend": {
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": true,
+          "total": false,
+          "values": false
+        },
+        "lines": false,
+        "linewidth": 2,
+        "links": [],
+        "nullPointMode": "null",
+        "paceLength": 10,
+        "percentage": false,
+        "pointradius": 4,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "alias": "",
+            "format": "time_series",
+            "rawSql": "SELECT\n        CONVERT(date, m.timestamp) AS time,\n        COUNt(m.[User]) as NewUsers\nFROM dbo.UserJoinedGeneralEvents m\nGROUP BY CONVERT(date, m.timestamp)\nORDER BY CONVERT(date, m.timestamp)",
+            "refId": "B"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "New Users: Daily",
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": "",
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "decimals": null,
+            "format": "dateTimeAsIso",
+            "label": "",
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": false
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      },
+      {
+        "aliasColors": {},
+        "bars": false,
+        "dashLength": 10,
+        "dashes": false,
+        "datasource": "${DS_MICROSOFT_SQL SERVER}",
+        "description": "",
+        "fill": 1,
+        "gridPos": {
+          "h": 8,
+          "w": 16,
+          "x": 0,
+          "y": 22
+        },
+        "hideTimeOverride": true,
+        "id": 7,
+        "interval": "1d",
+        "legend": {
+          "alignAsTable": false,
+          "avg": false,
+          "current": false,
+          "max": false,
+          "min": false,
+          "show": false,
+          "total": false,
+          "values": false
+        },
+        "lines": true,
+        "linewidth": 1,
+        "links": [],
+        "nullPointMode": "null",
+        "paceLength": 10,
+        "percentage": false,
+        "pointradius": 4,
+        "points": false,
+        "renderer": "flot",
+        "seriesOverrides": [],
+        "spaceLength": 10,
+        "stack": false,
+        "steppedLine": false,
+        "targets": [
+          {
+            "alias": "",
+            "format": "time_series",
+            "rawSql": "SELECT\n        u.Name,\n        CONVERT(date, m.timestamp) AS time,\n        SUM(COUNT(m.Id)) OVER ( PARTITION BY u.Name ORDER BY Convert(date, m.Timestamp) ROWS BETWEEN unbounded preceding  and current row ) as PostSum\nFROM dbo.MessageHistory m INNER JOIN dbo.Users u ON m.[User] = u.Id\nGROUP BY u.Name, CONVERT(date, m.timestamp)\nORDER BY CONVERT(date, m.timestamp), u.Name",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [],
+        "timeFrom": null,
+        "timeRegions": [],
+        "timeShift": null,
+        "title": "Total User Posts",
+        "tooltip": {
+          "shared": true,
+          "sort": 2,
+          "value_type": "individual"
+        },
+        "type": "graph",
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        },
+        "yaxes": [
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "decimals": 0,
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "yaxis": {
+          "align": false,
+          "alignLevel": null
+        }
+      }
+    ],
+    "refresh": false,
+    "schemaVersion": 16,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now/M",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "5s",
+        "10s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ],
+      "time_options": [
+        "5m",
+        "15m",
+        "1h",
+        "6h",
+        "12h",
+        "24h",
+        "2d",
+        "7d",
+        "30d"
+      ]
+    },
+    "timezone": "",
+    "title": "Rancher Slack",
+    "uid": "J4E2FrCiz",
+    "version": 10
+  }
