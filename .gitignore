@@ -4,3 +4,5 @@ obj/
 .idea/
 .env
 *.DotSettings.user
+Properties/
+.vs/
