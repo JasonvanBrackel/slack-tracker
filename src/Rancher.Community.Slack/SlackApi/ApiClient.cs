@@ -113,5 +113,24 @@ namespace Rancher.Community.Slack.SlackApi
             _uriBuilder.Path = path;
             var response = _client.GetAsync(_uriBuilder.Uri).Result;
         }
+
+        public bool IsActive(string welcomerId)
+        {
+            ResetQueryParameters();
+            var query = HttpUtility.ParseQueryString(_uriBuilder.Query);
+            query["token"] = _authorizationToken;
+            query["user"] = welcomerId;
+
+
+            _uriBuilder.Query = query.ToString();
+
+            const string path = "api/users.getPresence";
+            _uriBuilder.Path = path;
+            var response = _client.GetAsync(_uriBuilder.Uri).Result;
+
+            var presence = response.ReadFromJson<GetPresenceReponse>();
+
+            return presence.presence.Equals("active");
+        }
     }
 }

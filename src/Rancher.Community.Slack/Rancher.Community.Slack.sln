@@ -1,24 +1,42 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventProcessor", "EventProcessor\EventProcessor.csproj", "{F550D049-EFA8-4381-9DF4-DD1A654FF2D3}"
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventProcessor", "EventProcessor\EventProcessor.csproj", "{F550D049-EFA8-4381-9DF4-DD1A654FF2D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{DC290F44-C658-4FF6-B1CD-C9D4832CBB38}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{DC290F44-C658-4FF6-B1CD-C9D4832CBB38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "Data\Data.csproj", "{4712A934-87AF-4F0D-876A-C5E2F52EBE8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "Data\Data.csproj", "{4712A934-87AF-4F0D-876A-C5E2F52EBE8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlackEventVerificationMiddleware", "SlackEventVerificationMiddleware\SlackEventVerificationMiddleware.csproj", "{2CC44237-C8DE-493A-8F5A-2F66B0346BF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlackEventVerificationMiddleware", "SlackEventVerificationMiddleware\SlackEventVerificationMiddleware.csproj", "{2CC44237-C8DE-493A-8F5A-2F66B0346BF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utilities", "Utilities\Utilities.csproj", "{9F77A212-C763-417E-810E-503125FA6520}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utilities", "Utilities\Utilities.csproj", "{9F77A212-C763-417E-810E-503125FA6520}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BufferingMiddleware", "BufferingMiddleware\BufferingMiddleware.csproj", "{FDC9B831-FA79-412B-80D9-BA57F43E1312}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BufferingMiddleware", "BufferingMiddleware\BufferingMiddleware.csproj", "{FDC9B831-FA79-412B-80D9-BA57F43E1312}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SlackApi", "SlackApi\SlackApi.csproj", "{E397929A-6337-4EE6-AE53-9F21FD001D2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlackApi", "SlackApi\SlackApi.csproj", "{E397929A-6337-4EE6-AE53-9F21FD001D2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserScraper", "UserScraper\UserScraper.csproj", "{9D2C7903-694D-456B-B553-A120D98D87FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserScraper", "UserScraper\UserScraper.csproj", "{9D2C7903-694D-456B-B553-A120D98D87FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChannelScraper", "ChannelScraper\ChannelScraper.csproj", "{A4067B39-52AF-481D-B748-2B3046213BDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChannelScraper", "ChannelScraper\ChannelScraper.csproj", "{A4067B39-52AF-481D-B748-2B3046213BDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Welcomer", "Welcomer\Welcomer.csproj", "{F5FE4222-4C80-49AB-B1A6-34DD5649FCB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Welcomer", "Welcomer\Welcomer.csproj", "{F5FE4222-4C80-49AB-B1A6-34DD5649FCB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7597E353-B49B-42A7-BB0F-DB33DB7E9500}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\scripts\ci.sh = ..\..\scripts\ci.sh
+		..\..\scripts\docker-compose.yml = ..\..\scripts\docker-compose.yml
+		..\..\README.md = ..\..\README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dockerfiles", "Dockerfiles", "{7F45A093-B26F-4F99-98D1-E5EF5F658BF8}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\scripts\ChannelScraper.Dockerfile = ..\..\scripts\ChannelScraper.Dockerfile
+		..\..\scripts\EventProcessor.Dockerfile = ..\..\scripts\EventProcessor.Dockerfile
+		..\..\scripts\UserScraper.Dockerfile = ..\..\scripts\UserScraper.Dockerfile
+		..\..\scripts\Welcomer.Dockerfile = ..\..\scripts\Welcomer.Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -66,5 +84,14 @@ Global
 		{F5FE4222-4C80-49AB-B1A6-34DD5649FCB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5FE4222-4C80-49AB-B1A6-34DD5649FCB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5FE4222-4C80-49AB-B1A6-34DD5649FCB4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7F45A093-B26F-4F99-98D1-E5EF5F658BF8} = {7597E353-B49B-42A7-BB0F-DB33DB7E9500}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C1E16963-D515-48E4-B3D0-DD0184CB4477}
 	EndGlobalSection
 EndGlobal

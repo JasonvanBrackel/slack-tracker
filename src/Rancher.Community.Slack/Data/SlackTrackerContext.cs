@@ -125,6 +125,8 @@ namespace Rancher.Community.Slack.Data
                 entity.Property(e => e.TimezoneLabel).HasMaxLength(255);
 
                 entity.Property(e => e.ImagePath).HasMaxLength(2083);
+
+                entity.Property(e => e.HasBeenWelcomed).HasDefaultValue(0);
             });
         }
     }

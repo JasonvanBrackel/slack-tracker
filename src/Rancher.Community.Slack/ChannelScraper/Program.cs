@@ -158,7 +158,7 @@ namespace Rancher.Community.Slack.ChannelScraper
             try
             {
                 _logger.Info("Starting metrics enpoint.");
-                var metricServer = new MetricServer(3001);
+                var metricServer = new MetricServer(3002);
                 metricServer.Start();
             }
             catch (Exception e)

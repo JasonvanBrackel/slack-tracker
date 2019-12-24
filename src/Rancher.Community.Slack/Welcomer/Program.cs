@@ -20,8 +20,10 @@ namespace Rancher.Community.Slack.Welcomer
         private static string _authToken;
         private static ApiClient _client;
         private static string _db_connection;
-        private static string _welcome_message;
-        
+        private static string _welcomeExistingUserMessage;
+        private static string _welcomeNewUserMessage;
+        private static string _welcomerId;
+
         static void Main(string[] args)
         {
             ConfigureStructuredLogging();
@@ -38,50 +40,50 @@ namespace Rancher.Community.Slack.Welcomer
             while (true)
             {
                 _logger.Info("Waking up, preparing to welcome new users.");
-                WelcomeNewUsers(_welcome_message);
+                WelcomeUsers();
                 _logger.Info("Done welcoming new users.  Sleeping for 15 minutes");
                 Thread.Sleep(new TimeSpan(0, 15, 0));
             }
         }
         
-        private static void WelcomeNewUsers(string welcomeMessage)
+        private static void WelcomeUsers()
         {
             try
             {
-                var now = DateTime.UtcNow;
-                if (DateTime.Now.IsDaylightSavingTime())
+                if(_client.IsActive(_welcomerId))
                 {
-                    now = now.AddHours(-4);
-                }
-                else
-                {
-                    now = now.AddHours(-5);
-                }
-
-                if (now.Hour >= 9 &&
-                    now.Hour < 17 &&
-                    now.DayOfWeek >= DayOfWeek.Monday &&
-                    now.DayOfWeek <= DayOfWeek.Friday)
-                {
-                    _logger.Log(LogLevel.Info, "Welcoming new users.");
+                    _logger.Log(LogLevel.Info, "Welcoming users users.");
                     using (var context = new SlackTrackerContext())
                     {
                         var usersToWelcome =
-                            context.UserJoinedGeneralEvents.Where(joins => joins.HasBeenWelcomed.Equals(false));
+                            context.UserJoinedGeneralEvents.Where(joins => joins.HasBeenWelcomed.Equals(false)).Take(5);
 
                         foreach (var user in usersToWelcome)
                         {
                             _logger.Log(LogLevel.Info, $"Welcoming {user.User}.");
-                            _client.PostMessage(user.User, welcomeMessage);
+                            _client.PostMessage(user.User, _welcomeNewUserMessage);
                         }
 
                         context.Database.ExecuteSqlCommand(
                             "UPDATE dbo.UserJoinedGeneralEvents SET HasBeenWelcomed = 1 FROM dbo.UserJoinedGeneralEvents");
+
+                        context.Database.ExecuteSqlCommand(
+                            "UPDATE dbo.Users SET HasBeenWelcomed = e.HasBeenWelcomed FROM dbo.Users u INNER JOIN dbo.UserJoinedGeneralEvents e ON u.Id = e.[User]");
+
+                        var existingUsersToWelcome = context.Users.Where(u => u.HasBeenWelcomed.Equals(false)).Take(5);
+
+                        foreach (var user in existingUsersToWelcome)
+                        {
+                            _logger.Log(LogLevel.Info, $"Welcoming Existing user {user.Id}.");
+                            _client.PostMessage(user.Id, _welcomeExistingUserMessage);
+                            user.HasBeenWelcomed = true;
+                            context.Update(user);
+                        }
                     }
                 }
                 else
                 {
-                    _logger.Log(LogLevel.Info, "Waiting until 9am ET to welcome users.");
+                    _logger.Log(LogLevel.Info, $"Waiting until welcoming user {_welcomerId} is active to welcome users.");
                 }
             }
             catch (Exception e)
@@ -146,9 +148,15 @@ namespace Rancher.Community.Slack.Welcomer
                 _authToken = Environment.GetEnvironmentVariable("authorization_token", EnvironmentVariableTarget.Process);
                 _logger.Info("Grabbing db_connection.");
                 _db_connection = Environment.GetEnvironmentVariable("db_connection", EnvironmentVariableTarget.Process);
-                _logger.Info("Grabbing welcome_message.");
-                _welcome_message = Environment.GetEnvironmentVariable("welcome_message", EnvironmentVariableTarget.Process);
+                _logger.Info("Grabbing welcome_message_new_users.");
+                _welcomeNewUserMessage = Environment.GetEnvironmentVariable("welcome_message_new_users", EnvironmentVariableTarget.Process);
+                _logger.Info("Grabbing welcome_message_existing_users.");
+                _welcomeExistingUserMessage = Environment.GetEnvironmentVariable("welcome_message_existing_users", EnvironmentVariableTarget.Process);
+                _logger.Info("Grabbing welcomer_id.");
+                _welcomerId = Environment.GetEnvironmentVariable("welcomer_id", EnvironmentVariableTarget.Process);
+
             }
+
             catch (Exception e)
             {
                 _logger.Error(e,

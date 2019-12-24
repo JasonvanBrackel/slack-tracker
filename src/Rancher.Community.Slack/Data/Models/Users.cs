@@ -9,5 +9,6 @@
         public string Timezone { get; set; }
         public string TimezoneLabel { get; set; }
         public string ImagePath { get; set; }
+        public bool HasBeenWelcomed { get; set; }
     }
 }
