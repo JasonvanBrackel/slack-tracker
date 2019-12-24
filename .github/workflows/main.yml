@@ -9,5 +9,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
+    - name: Run the CI Script
       run: ./scripts/ci.sh
+    - name: Test Run
+      run: ls -al
