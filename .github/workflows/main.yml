@@ -9,6 +9,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - name: Get Directory
+      run: pwd
     - name: Test Run
       run: ls -al
     - name: Run the CI Script
